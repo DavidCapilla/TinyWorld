@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
+
 import javax.swing.JPanel;
 
 public class WorldPanel extends JPanel{
@@ -10,7 +12,6 @@ public class WorldPanel extends JPanel{
     
     public WorldPanel(World world) {
         this.world = world;
-        //setLayout(new GridLayout(3, 1));
     }
     
     @Override
@@ -19,6 +20,7 @@ public class WorldPanel extends JPanel{
         
         int N = world.getNRows();
         int M = world.getNColumns();
+        Point location = new Point();
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setColor(Color.DARK_GRAY);
         int size = Math.min(getWidth() / M, getHeight() / N);
@@ -28,21 +30,20 @@ public class WorldPanel extends JPanel{
             int x = (getWidth() - (size * M)) / 2;
             for (int vert = 0; vert < M; vert++) {
                 g2d.fillRect(x, y, size, size);
-                if (world.regionPopulation[horz][vert] == 1) {
+                location.setLocation(horz, vert);
+                if (world.getPopulationType(location).equals("Source")) {
                     g2d.setColor(Color.WHITE);
                     g2d.fillRect(x, y, size, size);
                     g2d.setColor(Color.DARK_GRAY);
-                } else if (world.regionPopulation[horz][vert] == 2) {
+                } else if (world.getPopulationType(location).equals("Prey")) {
                     g2d.setColor(Color.GREEN);
                     g2d.fillRect(x, y, size, size);
                     g2d.setColor(Color.DARK_GRAY);
-                } else if (world.regionPopulation[horz][vert] == 3) {
+                } else if (world.getPopulationType(location).equals("Predator")) {
                     g2d.setColor(Color.RED);
                     g2d.fillRect(x, y, size, size);
                     g2d.setColor(Color.DARK_GRAY);
-                }
-         
-                
+                }                
                 x += size;
             }
             y += size;
