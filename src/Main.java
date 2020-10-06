@@ -1,11 +1,18 @@
 
 public class Main {
-    public static void main (String []args) {
+    public static void main (String []args) throws InterruptedException {
         
         FlatWorld flatWorld = new FlatWorld(100, 100);
-        flatWorld.createInitialSource(10);
-        flatWorld.createInitialPrey(5);
-        flatWorld.createInitialPredator(4);
+        flatWorld.createSource(50);
+        flatWorld.createPrey(20);
+        flatWorld.createPredator(10);
+        flatWorld.setTimeToGrowSource(1);
         WorldFrame worldFrame = new WorldFrame(flatWorld);
+        
+        while(true) {
+            Thread.sleep(50);
+            flatWorld.update();
+            worldFrame.repaint();
+        }
     }
 }

@@ -10,7 +10,7 @@ public class CreateInitialSourceTest {
         int nColumns = 100;
         int initialSourceQuantity = 10;
         FlatWorld flatWorld = new FlatWorld(nRows, nColumns);
-        flatWorld.createInitialSource(initialSourceQuantity);
+        flatWorld.createSource(initialSourceQuantity);
         assertEquals(initialSourceQuantity, flatWorld.getSourcePopulation());
     }   
     
@@ -21,7 +21,7 @@ public class CreateInitialSourceTest {
         int initialSourceQuantity = 10;
         int initialSourceCounter = 0;
         FlatWorld flatWorld = new FlatWorld(nRows, nColumns);
-        flatWorld.createInitialSource(initialSourceQuantity);
+        flatWorld.createSource(initialSourceQuantity);
         
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nColumns; j++) {

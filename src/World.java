@@ -1,6 +1,8 @@
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 public abstract class World {
@@ -12,8 +14,7 @@ public abstract class World {
     private HashMap<Point, Source> locationsSource;
     private HashMap<Point, Prey> locationsPrey;
     private HashMap<Point, Predator> locationsPredator;
-    
-
+    private Clock clock;
 
     public World (int nRows, int nColumns) {
         this.nRows = nRows;
@@ -23,6 +24,11 @@ public abstract class World {
         locationsPrey = new HashMap<Point, Prey>();
         locationsPredator = new HashMap<Point, Predator>();
         randomGenerator = new Random();
+        clock = new Clock();
+    }
+    
+    public void setTimeToGrowSource (double timeInSeconds) {
+        clock.setTimeToGrowSource(timeInSeconds);
     }
     
     public int getNRows() {
@@ -33,16 +39,17 @@ public abstract class World {
         return nColumns;
     }
 
-    public void createInitialSource(int initialSourceQuantity) {
+    public void createSource(int initialSourceQuantity) {
         Point location;
         for (int k = 0; k < initialSourceQuantity; k++) {
             location = findRandomEmptyLocation();
             regionPopulation[location.x][location.y] = 1;
             locationsSource.put(location, new Source());
         }
+        clock.setTimeSourceGeneratedToNow();
     }
     
-    public void createInitialPrey(int initialPreyQuantity) {
+    public void createPrey(int initialPreyQuantity) {
         Point location;
         for (int k = 0; k < initialPreyQuantity; k++) {
             location = findRandomEmptyLocation();
@@ -51,7 +58,7 @@ public abstract class World {
         }
     }
     
-    public void createInitialPredator(int initialPredatorQuantity) {
+    public void createPredator(int initialPredatorQuantity) {
         Point location;
         for (int k = 0; k < initialPredatorQuantity; k++) {
             location = findRandomEmptyLocation();
@@ -97,4 +104,55 @@ public abstract class World {
     public int getPredatorPopulation() {
         return locationsPredator.size();
     }    
+    
+    public void update() {
+        generateSource();
+        // movePrey(); TODO
+        // movePredator(); TODO
+        
+        removeConsumedSource();
+        removeDeathPrey();
+        removeDeathPredator();
+    }
+        
+    public void generateSource() {
+        int sourceToGenerate = 1;
+        if(clock.isTimeToGrowSource())
+            createSource(sourceToGenerate);
+    }
+    
+    private void removeConsumedSource() {
+        Iterator<Entry<Point, Source>> it  = locationsSource.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Point, Source> entry = it.next();
+            if (!entry.getValue().isAlive())
+                it.remove();
+        }
+    }
+    
+    private void removeDeathPrey() {
+        Iterator<Entry<Point, Prey>> it  = locationsPrey.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Point, Prey> entry = it.next();
+            if (!entry.getValue().isAlive())
+                it.remove();
+        }
+    }
+    
+    private void removeDeathPredator() {
+        Iterator<Entry<Point, Predator>> it  = locationsPredator.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Point, Predator> entry = it.next();
+            if (!entry.getValue().isAlive())
+                it.remove();
+        }
+    }
+    
+    public void movePrey() {
+        throw new RuntimeException("movePrey not implemented yet.");
+    }
+    
+    public void movePredator() {
+        throw new RuntimeException("movePredator not implemented yet.");
+    }
 }

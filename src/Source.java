@@ -1,4 +1,4 @@
 
-public class Source {
+public class Source extends Being {
 
 }
