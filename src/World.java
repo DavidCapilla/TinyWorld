@@ -122,12 +122,31 @@ public abstract class World {
     
     public void update() {
         generateSource();
+        
+        consumePopulationEnergy();
         // movePrey(); TODO
         // movePredator(); TODO
         
         removeDeathBeings();
     }
         
+    private void consumePopulationEnergy() {
+        Iterator<Entry<Point, Being>> it  = locationsPopulation.entrySet().iterator();
+        Being being;
+        while (it.hasNext()) {
+            Map.Entry<Point, Being> entry = it.next();
+            being = entry.getValue();
+            if (isConsumer(being))
+                ((Consumer) being).consumeEnergy();
+        }   
+    }
+    
+    private boolean isConsumer(Being being) {
+        if (being.Type.equals("Prey") || being.Type.equals("Predator"))
+            return true;
+        else return false;
+    }
+
     public void generateSource() {
         int sourceToGenerate = 1;
         if(isTimeToGrowSource())

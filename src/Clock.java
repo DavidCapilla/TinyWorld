@@ -4,6 +4,10 @@ public class Clock {
     public static final long NANOSECONDSINASECOND = 1000000000;
     private long origin;
         
+    public Clock() {
+        setChronometerOriginToNow();
+    }
+    
     public void setChronometerOriginToNow() {
         origin = System.nanoTime();
     }
