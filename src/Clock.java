@@ -2,18 +2,17 @@
 public class Clock {
 
     public static final long NANOSECONDSINASECOND = 1000000000;
-    private long timeToGrowSource;
-    private long lastTimeSourceGenerated;
-    
-    public void setTimeToGrowSource (double timeInSeconds) {
-        timeToGrowSource = (long) (timeInSeconds * NANOSECONDSINASECOND);
+    private long origin;
+        
+    public void setChronometerOriginToNow() {
+        origin = System.nanoTime();
     }
     
-    public void setTimeSourceGeneratedToNow() {
-        lastTimeSourceGenerated = System.nanoTime();
+    public double getTimeFromOriginInSeconds() {
+        return (double) (System.nanoTime() - origin) / NANOSECONDSINASECOND;
     }
     
-    public boolean isTimeToGrowSource() {
-        return System.nanoTime() - lastTimeSourceGenerated > timeToGrowSource;
+    public boolean hasPassedMoreTimeThanThatFromOrigin(double timeInSeconds) {
+        return System.nanoTime() - origin > (long) (timeInSeconds * NANOSECONDSINASECOND);
     }
 }

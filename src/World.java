@@ -11,6 +11,7 @@ public abstract class World {
     private int nColumns;
     private Random randomGenerator;
     private HashMap<Point, Being> locationsPopulation;
+    private double timeToGrowSource;
     private Clock clock;
 
     public World (int nRows, int nColumns) {
@@ -30,7 +31,7 @@ public abstract class World {
     }
     
     public void setTimeToGrowSource (double timeInSeconds) {
-        clock.setTimeToGrowSource(timeInSeconds);
+        timeToGrowSource = timeInSeconds;
     }
     
     public int getNRows() {
@@ -47,7 +48,7 @@ public abstract class World {
             location = findRandomEmptyLocation();
             locationsPopulation.put(location, new Source());
         }
-        clock.setTimeSourceGeneratedToNow();
+        clock.setChronometerOriginToNow();
     }
     
     public void createPrey(int initialPreyQuantity) {
@@ -100,73 +101,50 @@ public abstract class World {
     }
 
     public int getSourcePopulation() {
-        int sourcePopulationQuantity = 0;
-        for (Being being : locationsPopulation.values())
-            if (being.Type.equals("Source"))
-                sourcePopulationQuantity++;
-        
-        return sourcePopulationQuantity;
+        return getPopulation("Source");
     }
     
     public int getPreyPopulation() {
-        int preyPopulationQuantity = 0;
-        for (Being being : locationsPopulation.values())
-            if (being.Type.equals("Prey"))
-                preyPopulationQuantity++;
-        
-        return preyPopulationQuantity;
+        return getPopulation("Prey");
     }
 
-    public int getPredatorPopulation() {
-        int predatorPopulationQuantity = 0;
-        for (Being being : locationsPopulation.values())
-            if (being.Type.equals("Predator"))
-                predatorPopulationQuantity++;
-        
-        return predatorPopulationQuantity;
+    public int getPredatorPopulation() {        
+        return getPopulation("Predator");
     }    
+    
+    public int getPopulation(String type) {
+        int PopulationQuantity = 0;
+        for (Being being : locationsPopulation.values())
+            if (being.Type.equals(type))
+                PopulationQuantity++; 
+        return PopulationQuantity;
+    }
     
     public void update() {
         generateSource();
         // movePrey(); TODO
         // movePredator(); TODO
         
-        removeConsumedSource();
-        removeDeathPrey();
-        removeDeathPredator();
+        removeDeathBeings();
     }
         
     public void generateSource() {
         int sourceToGenerate = 1;
-        if(clock.isTimeToGrowSource())
+        if(isTimeToGrowSource())
             createSource(sourceToGenerate);
     }
     
-    private void removeConsumedSource() {
-      /*  Iterator<Entry<Point, Source>> it  = locationsSource.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Point, Source> entry = it.next();
-            if (!entry.getValue().isAlive())
-                it.remove();
-        }*/
+    private boolean isTimeToGrowSource() {
+        return clock.hasPassedMoreTimeThanThatFromOrigin(timeToGrowSource);
     }
-    
-    private void removeDeathPrey() {
-        /*Iterator<Entry<Point, Prey>> it  = locationsPrey.entrySet().iterator();
+
+    private void removeDeathBeings() {
+        Iterator<Entry<Point, Being>> it  = locationsPopulation.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<Point, Prey> entry = it.next();
+            Map.Entry<Point, Being> entry = it.next();
             if (!entry.getValue().isAlive())
                 it.remove();
-        }*/
-    }
-    
-    private void removeDeathPredator() {
-        /*Iterator<Entry<Point, Predator>> it  = locationsPredator.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Point, Predator> entry = it.next();
-            if (!entry.getValue().isAlive())
-                it.remove();
-        }*/
+        }
     }
     
     public void movePrey() {
