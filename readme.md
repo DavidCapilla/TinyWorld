@@ -15,3 +15,7 @@ Small project to learn basic GUI and a reinforcement learning in a simulated wor
 10. Implement a reinforcement learning algorithm that allows the beings to learn how to get food.
 11. Implement a GUI that allows to visualize the world and interact with it.
 
+## Visualization
+
+Date of visualization 2020-10-10
+![Should display visualization](https://github.com/DavidCapilla/TinyWorld/blob/master/TinyWorld.gif)
