@@ -5,6 +5,7 @@ public class Predator extends Consumer{
         maxEnergy = 1000;
         currentEnergy = maxEnergy;
         lifeSpan = 60;
+        brain = new RandomBrain();
     }
 
     @Override

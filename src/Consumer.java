@@ -4,10 +4,12 @@ public abstract class Consumer extends Being{
     protected double currentEnergy;
     protected double lifeSpan;
     private Clock internalClock;
+    protected Brain brain;
         
     public Consumer() {
         internalClock = new Clock();
     }
+    
     protected void eat(Being other) {
         if (isFood(other)) {
             other.isAlive = false;
@@ -24,4 +26,6 @@ public abstract class Consumer extends Being{
         if (currentEnergy <= 0)
             isAlive = false;
     }
+    
+     
 }

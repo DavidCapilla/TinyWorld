@@ -5,6 +5,7 @@ public class Prey extends Consumer{
             maxEnergy = 1000;
             currentEnergy = maxEnergy;
             lifeSpan = 30;
+            brain = new RandomBrain();
         }
 
         @Override
