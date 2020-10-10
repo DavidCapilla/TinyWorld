@@ -4,7 +4,7 @@ public class Predator extends Consumer{
         Type = "Predator";
         maxEnergy = 1000;
         currentEnergy = maxEnergy;
-        lifeSpan = 60;
+        lifeSpan = 20;
         brain = new RandomBrain();
     }
 

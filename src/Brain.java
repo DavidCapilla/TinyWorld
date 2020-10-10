@@ -1,4 +1,4 @@
 
 public abstract class Brain {
-    public abstract Movement decideDirectionOfMovement(Sensor sensor);
+    public abstract Movement decideMovement(Sensor sensor);
 }

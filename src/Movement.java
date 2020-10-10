@@ -1,25 +1,25 @@
 import java.awt.Point;
 
 public class Movement {
-    private Point relativeMovement;
+    private Point translation;
     
     public Movement() {
-        relativeMovement = new Point();
+        translation = new Point();
     }
     
     public Movement(int x, int y) {
-        setRelativeMovement(new Point(x, y));
+        setTranslation(new Point(x, y));
     }
     
-    public Point getRelativeMovement() {
-        return relativeMovement;
+    public Point getTranslation() {
+        return translation;
     }
     
-    public void setRelativeMovement (Point relativeMovement) {
-        if(relativeMovement.x < -1 || relativeMovement.x > 1 ||
-           relativeMovement.y < -1 || relativeMovement.y > 1)
+    public void setTranslation (Point translation) {
+        if(translation.x < -1 || translation.x > 1 ||
+           translation.y < -1 || translation.y > 1)
             throw new ArrayIndexOutOfBoundsException("relativeMovement only allows unit movement.");
         else
-            this.relativeMovement = relativeMovement;       
+            this.translation = translation;       
     }
 }

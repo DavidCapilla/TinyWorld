@@ -124,7 +124,7 @@ public abstract class World {
         generateSource();
         
         consumePopulationEnergy();
-        // movePrey(); TODO
+        movePrey();
         // movePredator(); TODO
         
         removeDeathBeings();
@@ -142,9 +142,31 @@ public abstract class World {
     }
     
     private boolean isConsumer(Being being) {
-        if (being.Type.equals("Prey") || being.Type.equals("Predator"))
+        if (isPrey(being) || isPredator(being))
             return true;
-        else return false;
+        else 
+            return false;
+    }
+    
+    private boolean isSource(Being being) {
+        if (being.Type.equals("Source"))
+            return true;
+        else 
+            return false;
+    }
+    
+    private boolean isPrey(Being being) {
+        if (being.Type.equals("Prey"))
+            return true;
+        else 
+            return false;
+    }
+    
+    private boolean isPredator(Being being) {
+        if (being.Type.equals("Predator"))
+            return true;
+        else 
+            return false;
     }
 
     public void generateSource() {
@@ -167,9 +189,43 @@ public abstract class World {
     }
     
     public void movePrey() {
-        throw new RuntimeException("movePrey not implemented yet.");
+        Iterator<Entry<Point, Being>> it  = locationsPopulation.entrySet().iterator();
+        Being being;
+        Movement move;
+        Point expectedPosition;
+        HashMap<Point, Being> locationsPopulationClone = new HashMap<Point, Being>(locationsPopulation);
+        while (it.hasNext()) {
+            Map.Entry<Point, Being> entry = it.next();
+            being = entry.getValue();
+            if (isPrey(being)) {
+                move = ((Consumer) being).getDecidedMovement();
+                if(isAllowedMovementForPrey(move, entry.getKey()))
+                {
+                    expectedPosition = getExpectedPosition(move, entry.getKey());
+                    if (!isLocationFree(expectedPosition)) 
+                        ((Consumer) being).eat(locationsPopulationClone.get(expectedPosition));
+                    locationsPopulationClone.remove(entry.getKey());
+                    locationsPopulationClone.put(expectedPosition, being);
+                }       
+            }
+        }   
+        locationsPopulation = locationsPopulationClone;
     }
     
+    private boolean isAllowedMovementForPrey(Movement move, Point currentPosition) {
+        Point expectedPosition = getExpectedPosition(move, currentPosition);
+        if (expectedPosition.equals(currentPosition))
+            return true;            
+        else if (isLocationFree(expectedPosition))
+            return true;
+        else if (isSource(locationsPopulation.get(expectedPosition)))
+            return true;
+        else
+            return false;
+    }
+    
+    protected abstract Point getExpectedPosition(Movement move, Point currentPosition);
+
     public void movePredator() {
         throw new RuntimeException("movePredator not implemented yet.");
     }

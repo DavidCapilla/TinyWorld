@@ -5,6 +5,7 @@ public abstract class Consumer extends Being{
     protected double lifeSpan;
     private Clock internalClock;
     protected Brain brain;
+    protected Sensor sensor;
         
     public Consumer() {
         internalClock = new Clock();
@@ -27,5 +28,8 @@ public abstract class Consumer extends Being{
             isAlive = false;
     }
     
+    public Movement getDecidedMovement() {
+        return brain.decideMovement(sensor);
+    }
      
 }

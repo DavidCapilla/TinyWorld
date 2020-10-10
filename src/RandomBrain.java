@@ -8,7 +8,7 @@ public class RandomBrain extends Brain {
     }
     
     @Override
-    public Movement decideDirectionOfMovement(Sensor sensor) {
+    public Movement decideMovement(Sensor sensor) {
         int x = randomMovementGenerator.nextInt(3) - 1;
         int y = randomMovementGenerator.nextInt(3) - 1;
         return new Movement(x, y);
