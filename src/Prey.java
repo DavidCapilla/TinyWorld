@@ -4,7 +4,7 @@ public class Prey extends Consumer{
             Type = "Prey";
             maxEnergy = 1000;
             currentEnergy = maxEnergy;
-            lifeSpan = 10;
+            lifeSpan = 20;
             brain = new RandomBrain();
         }
 

@@ -125,7 +125,7 @@ public abstract class World {
         
         consumePopulationEnergy();
         movePrey();
-        // movePredator(); TODO
+        movePredator();
         
         removeDeathBeings();
     }
@@ -191,22 +191,41 @@ public abstract class World {
     public void movePrey() {
         Iterator<Entry<Point, Being>> it  = locationsPopulation.entrySet().iterator();
         Being being;
+        Being otherBeing;
         Movement move;
+        Point currentPosition;
         Point expectedPosition;
         HashMap<Point, Being> locationsPopulationClone = new HashMap<Point, Being>(locationsPopulation);
+        Map.Entry<Point, Being> entry;
         while (it.hasNext()) {
-            Map.Entry<Point, Being> entry = it.next();
+            entry = it.next();
             being = entry.getValue();
-            if (isPrey(being)) {
+            if (isPrey(being)) { // XXX
+                currentPosition = entry.getKey();
                 move = ((Consumer) being).getDecidedMovement();
-                if(isAllowedMovementForPrey(move, entry.getKey()))
+                if (isAllowedMovementForPrey(move, currentPosition)) // XXX
                 {
-                    expectedPosition = getExpectedPosition(move, entry.getKey());
-                    if (!isLocationFree(expectedPosition)) 
-                        ((Consumer) being).eat(locationsPopulationClone.get(expectedPosition));
-                    locationsPopulationClone.remove(entry.getKey());
-                    locationsPopulationClone.put(expectedPosition, being);
-                }       
+                    expectedPosition = getExpectedPosition(move, currentPosition);
+                    if (isLocationFree(expectedPosition)) {
+                        locationsPopulationClone.remove(currentPosition);
+                        locationsPopulationClone.put(expectedPosition, being);
+                    }
+                    else {
+                        otherBeing = locationsPopulationClone.get(expectedPosition);
+                        if (isSource(otherBeing)) {
+                            ((Consumer) being).eat(otherBeing);
+                            locationsPopulationClone.remove(currentPosition);
+                            locationsPopulationClone.put(expectedPosition, being);
+                        }
+                        else if (isPredator(otherBeing)) {
+                            ((Consumer) otherBeing).eat(being);
+                            locationsPopulationClone.remove(currentPosition);
+                        }
+                    }
+                }   
+                else {
+                    // Do nothing, stay in the same position.
+                }
             }
         }   
         locationsPopulation = locationsPopulationClone;
@@ -220,13 +239,62 @@ public abstract class World {
             return true;
         else if (isSource(locationsPopulation.get(expectedPosition)))
             return true;
+        else if (isPredator(locationsPopulation.get(expectedPosition)))
+            return true; // It is allowed to run into a Predator.
         else
             return false;
     }
     
-    protected abstract Point getExpectedPosition(Movement move, Point currentPosition);
-
     public void movePredator() {
-        throw new RuntimeException("movePredator not implemented yet.");
+        Iterator<Entry<Point, Being>> it  = locationsPopulation.entrySet().iterator();
+        Being being;
+        Being otherBeing;
+        Movement move;
+        Point currentPosition;
+        Point expectedPosition;
+        HashMap<Point, Being> locationsPopulationClone = new HashMap<Point, Being>(locationsPopulation);
+        Map.Entry<Point, Being> entry;
+        while (it.hasNext()) {
+            entry = it.next();
+            being = entry.getValue();
+            if (isPredator(being)) { // XXX
+                currentPosition = entry.getKey();
+                move = ((Consumer) being).getDecidedMovement();
+                if (isAllowedMovementForPredator(move, currentPosition)) // XXX
+                {
+                    expectedPosition = getExpectedPosition(move, currentPosition);
+                    if (isLocationFree(expectedPosition)) {
+                        locationsPopulationClone.remove(currentPosition);
+                        locationsPopulationClone.put(expectedPosition, being);
+                    }
+                    else {
+                        otherBeing = locationsPopulationClone.get(expectedPosition);
+                        if (isPrey(otherBeing)) {
+                            ((Consumer) being).eat(otherBeing);
+                            locationsPopulationClone.remove(currentPosition);
+                            locationsPopulationClone.put(expectedPosition, being);
+                        }
+                    }
+                }   
+                else {
+                    // Do nothing, stay in the same position.
+                }
+            }
+        }   
+        locationsPopulation = locationsPopulationClone;
     }
+    
+    private boolean isAllowedMovementForPredator(Movement move, Point currentPosition) {
+        Point expectedPosition = getExpectedPosition(move, currentPosition);
+        if (expectedPosition.equals(currentPosition))
+            return true;            
+        else if (isLocationFree(expectedPosition))
+            return true;
+        else if (isPrey(locationsPopulation.get(expectedPosition)))
+            return true;
+        else
+            return false;
+    }
+
+    protected abstract Point getExpectedPosition(Movement move, Point currentPosition);
 }
