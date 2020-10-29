@@ -17,6 +17,6 @@ Small project to learn basic GUI and a reinforcement learning in a simulated wor
 
 ## Visualization
 
-Date of visualization 2020-10-10
+Date of visualization 2020-10-11
 
 ![Should display visualization](https://github.com/DavidCapilla/TinyWorld/blob/master/TinyWorld.gif)
