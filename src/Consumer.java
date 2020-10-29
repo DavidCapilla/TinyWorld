@@ -14,7 +14,9 @@ public abstract class Consumer extends Being{
     protected void eat(Being other) {
         if (isFood(other)) {
             other.isAlive = false;
+            other.readyToReporduce = false;
             currentEnergy = maxEnergy;
+            readyToReporduce = true;
             internalClock.setChronometerOriginToNow();    
         }
     }
