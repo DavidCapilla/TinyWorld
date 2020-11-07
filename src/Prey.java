@@ -1,4 +1,6 @@
-
+/**
+ * <h1> Representation of a Consumer that consumes Sources </h1>
+ */
 public class Prey extends Consumer{
         public Prey() {
             Type = "Prey";

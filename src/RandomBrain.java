@@ -1,6 +1,10 @@
 import java.util.Random;
-
-public class RandomBrain extends Brain {
+/**
+ * <h1> Representation of a Brain acting randomly </h1>
+ * It is a naive implementation of Brain that uses no sensor
+ * information to decide a random movement.
+ */
+public class RandomBrain implements Brain {
     private Random randomMovementGenerator;
     
     public RandomBrain() {

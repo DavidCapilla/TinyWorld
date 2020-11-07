@@ -1,5 +1,10 @@
 import java.awt.Point;
 
+/**
+ * <h1> Implementation of a Flat World </h1>
+ * Extends the World by implementing a finite flat world,
+ * having defined boundaries delimiting the movement of the Beings.
+ */
 public class FlatWorld extends World{
 
     public FlatWorld(int nRows, int nColumns) {

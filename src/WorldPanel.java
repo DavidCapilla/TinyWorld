@@ -4,7 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import javax.swing.JPanel;
-
+/**
+ * <h1> Visualisation of the World </h1>
+ * It defines the visualisation of the World as a grid where the empty
+ * regions are defined in a dark gray, the Sources are white, the Preys are
+ * green and the Predators are red.
+ */
 public class WorldPanel extends JPanel{
     
     private static final long serialVersionUID = 1L;

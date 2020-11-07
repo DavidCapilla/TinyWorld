@@ -1,4 +1,7 @@
-
+/**
+ * <h1> Clock in charge of the time </h1>
+ * Gets to know how much time has passed from events.
+ */
 public class Clock {
 
     public static final long NANOSECONDSINASECOND = 1000000000;

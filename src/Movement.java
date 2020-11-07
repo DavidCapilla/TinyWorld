@@ -1,5 +1,8 @@
 import java.awt.Point;
 
+/**
+ * <h1> Set of unit movements allowed </h1>
+ */
 public class Movement {
     private Point translation;
     

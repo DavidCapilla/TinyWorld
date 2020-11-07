@@ -1,4 +1,8 @@
-
+/**
+ * <h1> Representation of Being that consumes another Being </h1>
+ * It extends the class Being with the capability and necessity
+ * to consume another Being. 
+ */
 public abstract class Consumer extends Being{
     protected double maxEnergy;
     protected double currentEnergy;

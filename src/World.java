@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+/**
+ * <h1> Abstract World </h1>
+ * It locates all the Beings and contains what rules them.
+ */
 public abstract class World {
 
     private int nRows;
