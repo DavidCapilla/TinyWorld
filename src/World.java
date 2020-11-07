@@ -1,6 +1,8 @@
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -127,11 +129,10 @@ public abstract class World {
     public void update() {
         generateSource();
         
-        
         movePreyPopulation();
         movePredatorPopulation();
         
-        //reproducePopulation();
+        reproducePopulation();
         
         consumePopulationEnergy();
         removeDeathBeings();
@@ -147,16 +148,53 @@ public abstract class World {
             entry = it.next();
             being = entry.getValue();
             if (being.isReadyToReproduce()) {
-                getRandomEmptyLocationCloseToThisLocation(entry.getKey());
+                reproduceBeingLocatedHere(being, entry.getKey());
             }
         }
+    }
+    
+    private void reproduceBeingLocatedHere(Being being, Point location) {
+        Point newbornLocation;
+        try {
+            newbornLocation = getRandomEmptyLocationCloseToThisLocation(location);
+            if(isPrey(being))
+                locationsPopulation.put(newbornLocation, new Prey());
+            else if (isPredator(being))
+                locationsPopulation.put(newbornLocation, new Predator());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // Do nothing, not reproduction is performed
+        }
+        // Either if it has been possible to reproduce or not, readyToReporduce is set to false.
+        being.readyToReporduce = false;
+    }
+
+    private Point getRandomEmptyLocationCloseToThisLocation(Point position) {
+        List<Point> emptyLocationsCloseTo; 
+
+        emptyLocationsCloseTo = getEmptyLocationsListCloseToThisLocation(position);
         
+        if (emptyLocationsCloseTo.size() > 0)
+            return emptyLocationsCloseTo.get(randomGenerator.nextInt(emptyLocationsCloseTo.size()));
+        else 
+            throw new ArrayIndexOutOfBoundsException("Can't get an empty location close this, all near positions are busy.");
     }
 
-    private void getRandomEmptyLocationCloseToThisLocation(Point position) {
-        // TODO
+    private List<Point> getEmptyLocationsListCloseToThisLocation(Point position) {
+        Movement move;
+        Point expectedPosition;
+        List<Point> emptyLocationsCloseTo = new LinkedList<Point>(); 
+        
+        // Checks all positions at 1 of distance.
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dx <= 1; dx++) {
+                move = new Movement(dx, dy);
+                expectedPosition = getExpectedPosition(move, position); 
+                if (isLocationFree(expectedPosition))
+                    emptyLocationsCloseTo.add(expectedPosition);
+            }
+        }
+        return emptyLocationsCloseTo;
     }
-
 
     private void consumePopulationEnergy() {
         Iterator<Entry<Point, Being>> it  = locationsPopulation.entrySet().iterator();

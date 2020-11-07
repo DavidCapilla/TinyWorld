@@ -17,6 +17,11 @@ Small project to learn basic GUI and a reinforcement learning in a simulated wor
 
 ## Visualization
 
-Date of visualization 2020-10-11
+Date of visualization 2020-11-07.
 
 ![Should display visualization](https://github.com/DavidCapilla/TinyWorld/blob/master/TinyWorld.gif)
+
+## Comments
+
+In a longer visualization it can be seen really nicely the oscillations predicted by the Lotka-Volterra equations. 
+However, since the interaction is stochastic, this can lead to extinction of one of the spices.

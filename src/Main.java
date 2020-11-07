@@ -6,7 +6,7 @@ public class Main {
         flatWorld.createSource(500);
         flatWorld.createPrey(100);
         flatWorld.createPredator(50);
-        flatWorld.setTimeToGrowSource(1);
+        flatWorld.setTimeToGrowSource(0.1);
         WorldFrame worldFrame = new WorldFrame(flatWorld);
         
         while (true) {
